@@ -107,8 +107,18 @@ def insert_from_command():
         if table =='1':
             print('please type user pid')
             pid = input()
+            if pid == 'q':
+                print('goodbye')
+                flag = False
+                break
+
             print('please type user full name')
             full_name = input()
+            if full_name == 'q':
+                print('goodbye')
+                flag = False
+                break
+
             result = (pid,full_name)
             c.execute('''INSERT INTO users VALUES (?,?)''', result)
             print('insert completed')
@@ -116,32 +126,97 @@ def insert_from_command():
                 
         elif table =='2':
             print('please type cluster id (cid)')
-            cid = int(input())
+            try:
+                tmp = input()
+                if tmp == 'q':
+                    print('goodbye')
+                    flag = False
+                    break
+
+                cid = int(tmp)
+            except ValueError as e:            
+                print('### ERROR!! ###')
+                print(e)
+                print('cid must be an INTEGER\n')
+                continue                        
+            
             print('please type number_of_seat')
-            number_of_seat = int(input())
+            try:
+                tmp = input()
+                if tmp == 'q':
+                    print('goodbye')
+                    flag = False
+                    break
+                
+                number_of_seat = int(tmp)
+            except ValueError as e:
+                print('### ERROR!! ###')
+                print(e)
+                print('number_of_seat must be an INTEGER\n')
+                continue
+            
             print('please type number_owned')
-            number_owned = int(input())
+            try:
+                tmp = input()
+                if tmp == 'q':
+                    print('goodbye')
+                    flag = False
+                    break
+
+                number_owned = int(tmp)
+            except ValueError as e:
+                print('### ERROR!! ###')
+                print(e)
+                print('number_owned must be an INTEGER\n')
+                continue
+            
             result = (cid, number_of_seat, number_owned)
             c.execute('''INSERT INTO cluster VALUES (?,?,?)''', result)
             print('insert completed')
-            flag = ask_to_end      
+            flag = ask_to_end()      
                 
         elif table =='3':
             print('please type seat id (sid)')
-            sid  = int(input())
+            try:
+                tmp = input()
+                if tmp == 'q':
+                    print('goodbye')
+                    flag = False
+                    break
+                
+                sid = int(tmp)
+            except ValueError as e:
+                print('### ERROR!! ###')
+                print(e)
+                print('sid must be an INTEGER\n')
+                continue
+            
             print('please type owner_id')
             owner_id = input()
+            if owner_id == 'q':
+                print('goodbye')
+                flag = False
+                break
+            
             print('please type cluster_id (cid)')
-            cluster_id = input()
             try:
-                cluster_id = int(cluster_id)
-            except ValueError2:
-                print('cluster_id must be int')
+                tmp = input()
+                if tmp == 'q':
+                    print('goodbye')
+                    flag = False
+                    break
+                
+                cluster_id = int(tmp)
+            except ValueError as e:
+                print('### ERROR!! ###')
+                print(e)
+                print('cluster_id must be an INTEGER\n')
+                continue
             
             result = (sid,conv(owner_id),conv(cluster_id))
             c.execute('''INSERT INTO seat VALUES (?,?,?)''', result)
             print('insert completed')
-            flag = ask_to_end
+            flag = ask_to_end()
 
         elif table == 'q':
             print('goodbye')
@@ -152,12 +227,10 @@ def insert_from_command():
             flag = True
                 
         # TODO: remaining insert process. you can modify overall interface of course.
-
     return
 
-
 def insert_interface():
-    print("csv(1) or command(2)?  (cf. always type 'q' to exit!!)")
+    print("csv(1) or command(2)?  (cf. type 'q' to exit!!)")
     mode = input()
     if mode=='1': #CSV
         flag = True
@@ -174,7 +247,6 @@ def insert_interface():
 
     elif mode=='2': #COMMAND
         insert_from_command()
-        # TODO
 
     elif mode=='q':
         print('goodbye')
