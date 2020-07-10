@@ -53,7 +53,7 @@ def remove_student_from_seat():
             flag = False
             return flag    
         
-        print('delete done')
+        print('removing student from seat1 done')
         return ask_to_end()
     else:
         print('No student has a seat. Goodbye.')
@@ -188,7 +188,7 @@ def remove_student_permanently():
             flag = False
             return flag    
         
-        print('delete done')
+        print('removing student done')
         return ask_to_end()
     else:
         print('No student. Goodbye.')
