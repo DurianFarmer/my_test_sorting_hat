@@ -31,14 +31,14 @@ if users_reaction =='1':
         first_pool.remove(b) 
         #a[0],b 활용해서 seat update
         seat_pool = []
-        for row in c.execute(f'SELECT * from seat where cluster_id = {b} and owner_id is null'):
+        for row in c.execute('''SELECT * from seat where cluster_id = ? and owner_id is null''', (b,) ):
             seat_pool.append(row[0])
         selected_seat = random.choice(seat_pool)
 
-        c.execute(f'''UPDATE seat SET owner_id ={str(a[0])} WHERE sid={selected_seat}''')
+        c.execute('''UPDATE seat SET owner_id =? WHERE sid=?''', (str(a[0]),selected_seat) )
         print(f'assign {a[1]} to seat {selected_seat}')
 
-        c.execute(f'''UPDATE cluster SET number_owned =number_owned +1 WHERE cid ={b}''')
+        c.execute('''UPDATE cluster SET number_owned =number_owned +1 WHERE cid =?''', (b,) )
 
         if not first_pool:
             first_pool = []
@@ -69,12 +69,12 @@ elif users_reaction=='2':
             b= random.choice(first_pool)
             first_pool.remove(b)
             seat_pool = []
-            for row in c.execute(f'SELECT * from seat WHERE cluster_id = {b} AND owner_id IS NULL'):
+            for row in c.execute('''SELECT * from seat WHERE cluster_id = ? AND owner_id IS NULL''', (b,) ):
                 seat_pool.append(row[0])
             selected_seat = random.choice(seat_pool)            
             c.execute('''UPDATE seat SET owner_id =? WHERE sid=?''', (str(mm), selected_seat))
             print(f'assign {mm} to seat {selected_seat}')
-            c.execute(f'''UPDATE cluster SET number_owned =number_owned +1 WHERE cid ={b}''')
+            c.execute('''UPDATE cluster SET number_owned =number_owned +1 WHERE cid =?''', (b,) )
             conn.commit()
             if not first_pool:
                 first_pool = []
