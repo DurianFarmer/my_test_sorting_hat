@@ -62,8 +62,9 @@ Ex4) How to insert new student manually<br/>
 ### assign_seat.py
 Randomly assign seats in a bulk(1) or assign a seat for one student(2) <br/>
 to consider both i) social distance and ii) interaction between students from different labs, <br/>
-the algorithm randomly places students in clusters <br/>
-such that each cluster has almost same number of students <br/>
+- the algorithm randomly places students in clusters <br/>
+- each cluster gets almost same number of students <br/>
+- as much as possible, students are not assigned adjacent seats that do not have a partition between them <br/>
 
 Ex 1) How to assign seats to many students at once<br/>
 - execute code<br/>
@@ -113,7 +114,7 @@ Ex 2) How to assign specific seat to student<br/>
 - please type new sid for student(pid) -> (ex) 1<br/>
 - update complete<br/>
 
-Ex 1) How to remove specific student permanently (for example, graduation) <br/>
+Ex 3) How to remove specific student permanently (for example, graduation) <br/>
 - execute code<br/>
 - what do you want to update? -> 3 <br/>
 - the program shows a list of all students<br/>

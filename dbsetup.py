@@ -17,7 +17,7 @@ print('cluster table created')
 
 #create seat table
 
-c.execute('''CREATE TABLE seat (sid int NOT NULL PRIMARY KEY, owner_id VARCHAR(100) unique, cluster_id int,
+c.execute('''CREATE TABLE seat (sid int NOT NULL PRIMARY KEY, owner_id VARCHAR(100) unique, cluster_id int,near int,
         FOREIGN KEY (owner_id) REFERENCES user (pid) ON DELETE SET NULL ON UPDATE SET NULL, FOREIGN KEY (cluster_id)
         REFERENCES cluster (cid) ON DELETE SET NULL ON UPDATE SET NULL)''')
 

@@ -47,12 +47,12 @@ def insert_from_csv(path, table):
             conv = lambda i : i or None
             for row in reader:
                 try:
-                    seat.append(((int(row[0]),conv(row[1]),int(conv(row[2])))))
+                    seat.append(((int(row[0]),conv(row[1]),int(conv(row[2]),conv(row[3])))))
                 except TypeError:
-                    seat.append(((int(row[0]),conv(row[1]),conv(row[2]))))
+                    seat.append(((int(row[0]),conv(row[1]),conv(row[2]),conv(row[3]))))
             
-            c.executemany('''INSERT INTO seat VALUES (?,?,?)''',seat)
-            print('insert cluster table completed')
+            c.executemany('''INSERT INTO seat VALUES (?,?,?,?)''',seat)
+            print('insert seat table completed')
             conn.commit()
             conn.close()
             seattable.close()
@@ -212,9 +212,16 @@ def insert_from_command():
                 print(e)
                 print('cluster_id must be an INTEGER\n')
                 continue
-            
-            result = (sid,conv(owner_id),conv(cluster_id))
-            c.execute('''INSERT INTO seat VALUES (?,?,?)''', result)
+            print('please type adjacent sid if it doesnt have adjacent seat just type enter')
+            adjacency_sid = input()
+            if adjacency_sid =='q':
+                print('goodbye')
+                flag =False
+                break
+
+            result = (sid,conv(owner_id),conv(cluster_id),conv(adjacency_sid))
+
+            c.execute('''INSERT INTO seat VALUES (?,?,?,?)''', result)
             print('insert completed')
             flag = ask_to_end()
 
