@@ -14,7 +14,7 @@ def insert_from_csv(path, table):
     try:
         c= conn.cursor()
         if table =='1':
-            usertable = open(path,'r')
+            usertable = open(path,'r', encoding='utf-8-sig')
             reader = csv.reader(usertable)
             user=[]
             for row in reader:

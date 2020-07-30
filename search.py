@@ -1,6 +1,8 @@
 # search.py
 # search registered information from DB tables
 import sqlite3
+import time
+
 conn = sqlite3.connect('test.db')
 c= conn.cursor()
 flag = True
@@ -23,15 +25,18 @@ while flag:
     query = input()
     if query =='1':
         for row in c.execute('''SELECT * FROM users'''):
-            print(row)
+            print(row[0][0:7] + '***', row[1])
         flag = ask_to_end()
     elif query =='2':
+        print('SEAT | STUDENT | CLUSTER')
         for row in c.execute('''SELECT * FROM seat'''):
-            print(row)
+            print(row[0], row[1] if row[1] is None else row[1][0:7] + '***', row[2])
         flag = ask_to_end()
     elif query =='3':
-        for row in c.execute('''SELECT users.pid, users.full_name, seat.sid, seat.cluster_id FROM users LEFT JOIN seat ON users.pid = seat.owner_id'''):
-            print(row)
+        for row in c.execute('''SELECT users.pid, users.full_name, seat.sid FROM users LEFT JOIN seat ON users.pid = seat.owner_id'''):
+            if row[2] is not None:
+                print(row[0][0:7] + '***', row[1], '|', row[2])
+                # time.sleep(1)
         flag = ask_to_end()            
     elif query == 'q':
         print('goodbye')
