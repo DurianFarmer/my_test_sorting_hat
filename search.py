@@ -47,15 +47,19 @@ while flag:
     elif query =='4':                
         sid_list = []
         name_list = []
-        seat_list = []        
+        seat_list = []
+        locker_list = []        
         for row in c.execute('''SELECT users.pid, users.full_name, seat.sid FROM users LEFT JOIN seat ON users.pid = seat.owner_id'''):
             if row[2] is not None:
                 sid_list.append(row[0][0:7] + '***')
                 name_list.append(row[1])
                 seat_list.append(row[2])
+                
+                seat = int(row[2])
+                locker_list.append(seat - 334 if seat > 400 else seat - 300 )
 
             
-        df = pd.DataFrame({'ID': sid_list, 'NAME': name_list, 'SEAT': seat_list})
+        df = pd.DataFrame({'ID': sid_list, 'NAME': name_list, 'SEAT': seat_list, 'LOCKER': locker_list})
         df.to_csv('result.csv', header=True, index=False, encoding='utf-8-sig')
         print('csv saved.  goodbye')
         flag = False            

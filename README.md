@@ -85,20 +85,23 @@ Ex 2) How to assign seats to specific student<br/>
 ### search.py
 **Important!** First and foremost, change `DB` variable to the database name. <br/>
 - ex) DB = 'seat_2020_1.db'
-Search the list every student(1), or every seat(2), or students and their seats(3) <br/>
+Search the list every student(1), or every seat(2), or students and their seats(3), or final result-make a csv(4) <br/>
 
 Ex 1) How to search every student<br/>
 - execute code<br/>
-- what do you want to see? -> 1 <br/>
+- type 1 <br/>
 
 Ex 2) How to search every seat<br/>
 - execute code<br/>
-- what do you want to see? -> 2 <br/>
+- type 2 <br/>
 
 Ex 3) How to search the seats that are assigned to students<br/>
 - execute code<br/>
-- what do you want to see? -> 3 <br/>
+- type 3 <br/>
 
+Ex 4) Get the result (3) as a csv file
+- execute code<br/>
+- type 4 <br/>
 
 ### update_info.py
 **Important!** First and foremost, change `DB` variable to the database name. <br/>
