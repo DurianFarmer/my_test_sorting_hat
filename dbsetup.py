@@ -1,8 +1,9 @@
 # db_init.py
 # db initialize at the first time, only once.
 import sqlite3
+DB = 'seat_2021_1.db'
 
-conn = sqlite3.connect('test.db')
+conn = sqlite3.connect(DB)
 c= conn.cursor()
 #create user table
 c.execute('''CREATE TABLE users (pid varchar(100) NOT NULL PRIMARY KEY, full_name VARCHAR(100))''')

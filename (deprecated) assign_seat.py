@@ -3,13 +3,13 @@
 import sqlite3
 import csv
 import random
-conn = sqlite3.connect('test.db')
+DB = 'seat_2021_1.db'
+
+conn = sqlite3.connect(DB)
 c = conn.cursor()
-# 여기에서 사람수가 좌석수보다 많으면 에러 메세지 출력,
+
 first_pool = []
-global cl
-cl = 3
-for row in c.execute('SELECT distinct cid FROM cluster WHERE number_of_seat-number_owned =?',(cl,)):
+for row in c.execute('SELECT distinct cid FROM cluster WHERE number_of_seat-number_owned >0'):
     first_pool.append(*row)
     
 user_list = []
@@ -35,16 +35,28 @@ if users_reaction =='1':
         seat_pool = []
         for row in c.execute('''SELECT * from seat where cluster_id = ? and owner_id is null''', (b,) ):
             seat_pool.append(row[0])
-        selected_seat = random.choice(seat_pool)
+        occupied_seat = []
+        for row in c.execute('''SELECT * from seat where cluster_id = ? and owner_id is not null''',(b,) ):
+            occupied_seat.append(row[0])
+        sd_pool = []
+        for xx in occupied_seat:
+            for row in c.execute('''SELECT * from seat where cluster_id = ? and near = ?''',(b,xx)):
+                sd_pool.append(row[0])
+        mmm_test = set(seat_pool) - set(sd_pool)
+        mmm_test = list(mmm_test)
+        if len(occupied_seat) <=4:
+            selected_seat = random.choice(mmm_test)
+        else:
+            selected_seat = random.choice(seat_pool)
 
         c.execute('''UPDATE seat SET owner_id =? WHERE sid=?''', (str(a[0]),selected_seat) )
         print(f'assign {a[1]} to seat {selected_seat}')
 
         c.execute('''UPDATE cluster SET number_owned =number_owned +1 WHERE cid =?''', (b,) )
+
         if not first_pool:
             first_pool = []
-            cl -=1
-            for row in c.execute('SELECT distinct cid from cluster where number_of_seat-number_owned =?',(cl,)):
+            for row in c.execute('SELECT distinct cid from cluster where number_of_seat-number_owned >0'):
                 first_pool.append(*row)
     print('done')
     conn.commit()
@@ -73,7 +85,20 @@ elif users_reaction=='2':
             seat_pool = []
             for row in c.execute('''SELECT * from seat WHERE cluster_id = ? AND owner_id IS NULL''', (b,) ):
                 seat_pool.append(row[0])
-            selected_seat = random.choice(seat_pool)            
+            occupied_seat =[]
+            for row in c.execute('''SELECT * from seat WHERE cluster_id = ? AND owner_id is not NULL''',(b,)):
+                occupied_seat.append(row[0])
+            sd_pool =[]
+            for xx in occupied_seat:
+                for row in c.execute('''SELECT * from seat WHERE cluster_id = ? AND near = ?''',(b,xx)):
+                    sd_pool.append(row[0])
+            mmm_test = set(seat_pool) - set(sd_pool)
+            mmm_test = list(mmm_test)
+            if len(occupied_seat) <=4:
+                selected_seat = random.choice(mmm_test)
+            else:
+                selected_seat = random.choice(seat_pool)
+
             c.execute('''UPDATE seat SET owner_id =? WHERE sid=?''', (str(mm), selected_seat))
             print(f'assign {mm} to seat {selected_seat}')
             c.execute('''UPDATE cluster SET number_owned =number_owned +1 WHERE cid =?''', (b,) )

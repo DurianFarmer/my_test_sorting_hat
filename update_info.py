@@ -1,7 +1,9 @@
 # update_info.py
 # update registered data on the DB table
 import sqlite3
-conn = sqlite3.connect('test.db')
+DB = 'seat_2021_1.db'
+
+conn = sqlite3.connect(DB)
 c= conn.cursor()
 flag = True
 
@@ -46,14 +48,14 @@ def remove_student_from_seat():
         c.execute('''UPDATE seat SET owner_id=NULL WHERE owner_id=?''', (str(mm),) )
         c.execute('''UPDATE cluster SET number_owned=number_owned-1 WHERE cid=?''', (cluster_id,) )    
         conn.commit()
+        print('removing student from seat done')
 
         pid_list.remove(mm)
         if not pid_list:
             print('No student has a seat. Goodbye.')
             flag = False
             return flag    
-        
-        print('removing student from seat1 done')
+                
         return ask_to_end()
     else:
         print('No student has a seat. Goodbye.')
@@ -147,56 +149,30 @@ def assign_specific_seat_to_student():
         flag = False
         return flag    
 
-def remove_student_permanently():
-    # C. 특정 학생을 목록에서 완전 제거
-    # 1. pid를 보여주고, 제거할 pid를 입력하도록 한다.
-    # 2. 입력된 pid에 대응하는 row를 삭제
+def remove_every_student_from_seat():
+    # C. 모든 학생의 자리를 지움 (테스트할 때 편리하기 위한 용도의 함수)        
     pid_list = []
-    for row in c.execute('''SELECT users.pid FROM users'''):
-        pid_list.append(*row)
-    print('all students:', pid_list)
-
+    for row in c.execute('''SELECT users.pid FROM users LEFT JOIN seat ON users.pid = seat.owner_id WHERE \
+                     seat.owner_id is not null'''):
+        pid_list.append(*row)    
+    
     if pid_list:
-        print('please type pid')
-        mm = input()
-        if mm == 'q':
-            print('goodbye')
-            flag = False            
-            return flag
-        elif mm not in pid_list:
-            print('select a pid in the list!!')
-            flag = True
-            return flag
-
-        cluster_id = -1
-        # 학생에게 자리가 배정되어 있었는지를 확인
-        for row in c.execute('''SELECT cluster_id FROM seat WHERE owner_id=?''', (str(mm),) ):
-            cluster_id = row[0]            
-        
-        # 자리가 학생에게 배정되어 있었던 경우, 학생의 자리를 없앤다.
-        if cluster_id != -1:
+        for mm in pid_list:                                    
+            for row in c.execute('''SELECT cluster_id FROM seat WHERE owner_id=?''', (str(mm),) ):
+                cluster_id = row[0]
             c.execute('''UPDATE seat SET owner_id=NULL WHERE owner_id=?''', (str(mm),) )
-            c.execute('''UPDATE cluster SET number_owned=number_owned-1 WHERE cid=?''', (cluster_id,) )
-        
-        # 학생을 삭제
-        c.execute('''DELETE FROM users WHERE pid=?''', (str(mm),) )    
-        conn.commit()
-
-        pid_list.remove(mm)
-        if not pid_list:
-            print('No student. Goodbye.')
-            flag = False
-            return flag    
-        
-        print('removing student done')
-        return ask_to_end()
+            c.execute('''UPDATE cluster SET number_owned=number_owned-1 WHERE cid=?''', (cluster_id,) )    
+            conn.commit()
+            
+        print('Removing every student from seat done. Goodbye')
+        return False
     else:
-        print('No student. Goodbye.')
+        print('No student has a seat. Goodbye.')
         flag = False
         return flag
 
 while flag:
-    print('what do you want to update? remove student from seat(1), assign specific seat to student(2), remove student permanently(3)')
+    print('what do you want to update? remove student from seat(1), assign specific seat to student(2), remove every student from seat(3)')
     print("(cf. type 'q' to exit!!)")
     mode = input()
     if mode == '1':
@@ -204,7 +180,7 @@ while flag:
     elif mode == '2':
         flag = assign_specific_seat_to_student()
     elif mode == '3':
-        flag = remove_student_permanently()
+        flag = remove_every_student_from_seat()
     elif mode == 'q':
         print('goodbye')
         flag = False

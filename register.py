@@ -5,10 +5,11 @@
 # 1      'usertable.csv'
 # 2      'clustertable.csv'
 # 3      'seattable.csv'
-
 import sqlite3
 import csv
-conn = sqlite3.connect('test.db')
+DB = 'seat_2021_1.db'
+
+conn = sqlite3.connect(DB)
 c= conn.cursor()
 def insert_from_csv(path, table):
     try:
@@ -21,10 +22,9 @@ def insert_from_csv(path, table):
                 user.append(tuple(row))
             c.executemany('''INSERT INTO users VALUES (?,?)''',user)
             print('insert user table completed')
-            conn.commit()
-            conn.close()
+            conn.commit()            
             usertable.close()
-            flag = False
+            flag = True
 
         elif table =='2':
             clustertable = open(path,'r')
@@ -35,10 +35,9 @@ def insert_from_csv(path, table):
             
             c.executemany('''INSERT INTO cluster VALUES (?,?,?)''',cluster)
             print('insert cluster table completed')
-            conn.commit()
-            conn.close()
+            conn.commit()            
             clustertable.close()
-            flag = False
+            flag = True
 
         elif table=='3':
             seattable = open(path,'r')
@@ -53,10 +52,9 @@ def insert_from_csv(path, table):
             
             c.executemany('''INSERT INTO seat VALUES (?,?,?,?)''',seat)
             print('insert seat table completed')
-            conn.commit()
-            conn.close()
+            conn.commit()            
             seattable.close()
-            flag = False
+            flag = True
 
         elif table == 'q':
             print('goodbye')
@@ -100,7 +98,7 @@ def insert_from_command():
             flag = True
         return flag
 
-    print("what table? user(1), cluster(2), seat(3)")
+    print("which table? user(1), cluster(2), seat(3)")
     table= input()
 
     while flag:
@@ -242,15 +240,21 @@ def insert_interface():
     if mode=='1': #CSV
         flag = True
         while flag:
-            print("enter the file path (ex: usertable.csv, ../usertable.csv, etc.)")
-            path = input()
-            if path == 'q':
+            print("which table? user(1), cluster(2), seat(3)")
+            table = input()
+            if table == 'q':
                 print('goodbye')
                 break
-            print("what table? user(1), cluster(2), seat(3)")
-            table = input()
-            flag = insert_from_csv(path, table)
-            # TODO
+            
+            path = ''
+            if table == '1':
+                path = 'usertable.csv'
+            elif table == '2':
+                path = 'clustertable.csv'
+            elif table == '3':
+                path = 'seattable.csv'
+
+            flag = insert_from_csv(path, table)            
 
     elif mode=='2': #COMMAND
         insert_from_command()
@@ -260,8 +264,7 @@ def insert_interface():
 
     else:
         print('error', ' ', 'please type 1 or 2\n')
-        insert_interface()
-        # TODO: raise error
+        insert_interface()        
 
 if __name__=='__main__':
     insert_interface()
