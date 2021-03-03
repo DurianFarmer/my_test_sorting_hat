@@ -1,4 +1,4 @@
-# Sorting-hat: a seat assigning randomly considering social distance
+# A seat assignment system with considering social distance
 
 Please refer some websites about sqlite and python.
 Start from here [https://www.sqlitetutorial.net/sqlite-sample-database/]
