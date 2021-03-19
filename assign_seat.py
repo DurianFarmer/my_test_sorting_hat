@@ -4,7 +4,7 @@
 import sqlite3
 import csv
 import random
-DB = 'seat_2021_1.db'
+DB = 'seat_221_1.db'
 
 conn = sqlite3.connect(DB)
 c = conn.cursor()
