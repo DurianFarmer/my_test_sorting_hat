@@ -22,7 +22,7 @@ def ask_to_end():
     return flag
                 
 while flag:
-    print('what do you want to see? every student(1), every seat(2), student with seat(3), final result-make a csv(4)')
+    print('what do you want to see? every student(1), every seat(2), student with seat(3), output final result as csv(4)')
     print("(cf. type 'q' to exit!!)")
     query = input()
 

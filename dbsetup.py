@@ -11,7 +11,6 @@ c.execute('''CREATE TABLE users (pid varchar(100) NOT NULL PRIMARY KEY, full_nam
 print('user table created')
 
 #create cluster table
-
 c.execute('''CREATE TABLE cluster (cid int NOT NULL PRIMARY KEY, number_of_seat int, number_owned int)''')
 
 print('cluster table created')
