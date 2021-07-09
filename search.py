@@ -32,16 +32,17 @@ while flag:
         flag = ask_to_end()
 
     elif query =='2':
-        print('SEAT | STUDENT | CLUSTER')
-        for row in c.execute('''SELECT * FROM seat'''):
-            print(row[0], row[1] if row[1] is None else row[1][0:7] + '***', row[2])
+        print('SEAT | CLUSTER | STUDENT')        
+        for row in c.execute('''SELECT seat.sid, seat.cluster_id, users.full_name FROM seat LEFT JOIN users ON users.pid = seat.owner_id'''):            
+            print(row[0], '|', row[1], '|', row[2])
         flag = ask_to_end()
 
     elif query =='3':
+        print('ID | STUDENT | SEAT')
         for row in c.execute('''SELECT users.pid, users.full_name, seat.sid FROM users LEFT JOIN seat ON users.pid = seat.owner_id'''):
             if row[2] is not None:
-                print(row[0][0:7] + '***', row[1], '|', row[2])            
-                time.sleep(1) ## for dramatic effect                            
+                print(row[0][0:7] + '***', '|' , row[1], '|', row[2])            
+                # time.sleep(1) ## for dramatic effect                            
         flag = ask_to_end()
 
     elif query =='4':                
